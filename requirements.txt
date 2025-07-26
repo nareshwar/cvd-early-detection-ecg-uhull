@@ -1,0 +1,21 @@
+# Core ML tools
+tensorflow==2.14.0
+ml-dtypes==0.2.0
+tensorboard==2.14.0
+keras==2.14.0
+tensorflow-addons==0.22.0
+
+# ECG + data processing
+ecg-plot
+wfdb
+numpy==1.24.3
+pandas==2.2.2
+scikit-learn
+
+# Visualization
+seaborn
+matplotlib
+
+# Kaggle utilities
+kagglehub
+ipywidgets
