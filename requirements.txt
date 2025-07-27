@@ -5,6 +5,11 @@ tensorboard==2.14.0
 keras==2.14.0
 tensorflow-addons==0.22.0
 
+# PyTorch tools (for LSTM & Transformer models)
+torch
+captum  # For explainability/attribution
+shap    # For SHAP explanations
+
 # ECG + data processing
 ecg-plot
 wfdb
@@ -15,7 +20,9 @@ scikit-learn
 # Visualization
 seaborn
 matplotlib
+plotly
 
 # Kaggle utilities
 kagglehub
 ipywidgets
+
