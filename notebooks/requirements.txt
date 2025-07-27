@@ -23,6 +23,6 @@ matplotlib
 plotly
 
 # Kaggle utilities
+kaggle
 kagglehub
 ipywidgets
-

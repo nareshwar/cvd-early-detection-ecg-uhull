@@ -205,3 +205,10 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# Ignore raw ECG data
+/data/
+/*.zip
+*.mat
+*.hea
+kaggle.json
