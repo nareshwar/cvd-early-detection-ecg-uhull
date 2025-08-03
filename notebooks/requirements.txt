@@ -26,3 +26,6 @@ plotly
 kaggle
 kagglehub
 ipywidgets
+
+# See-RNN utilities
+see-rnn
