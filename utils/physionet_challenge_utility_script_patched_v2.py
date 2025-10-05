@@ -945,10 +945,6 @@ def iterate_threshold(y_pred, ecg_filenames, y ,val_fold ):
     
     return all_scores
 
-
-    
-    
-    
 def plot_normalized_conf_matrix(y_pred, ecg_filenames, y, val_fold, threshold, snomedclasses, snomedabbr):
     conf_m = compute_modified_confusion_matrix(generate_validation_data(ecg_filenames,y,val_fold)[1], (y_pred>threshold)*1)
     conf_m = np.nan_to_num(conf_m)
@@ -965,6 +961,7 @@ def plot_normalized_conf_matrix(y_pred, ecg_filenames, y, val_fold, threshold, s
     plt.figure(figsize = (12,10))
     sns.set(font_scale=1.4)#for label size
     sns.heatmap(df_norm_col, cmap="rocket_r", annot=True,cbar=False, annot_kws={"size": 10},fmt=".2f")# 
+
 #############################
 #Adding rule-based algorithms
 #############################
