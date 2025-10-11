@@ -27,5 +27,6 @@ tensorflow-addons==0.10.0
 keras==2.4.3
 lime
 shap
+timeshap
 plotly
-nbformat
+nbformats
