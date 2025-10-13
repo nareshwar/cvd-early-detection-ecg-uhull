@@ -302,20 +302,20 @@ def residual_network_1d():
     output_layer = tf.keras.layers.Dense(27, activation='softmax')(gap_layer)
 
     model = tf.keras.models.Model(inputs=input_layer, outputs=output_layer)
-
-    model.compile(loss=tf.keras.losses.BinaryCrossentropy(), optimizer=tf.keras.optimizers.Adam(learning_rate=0.001), metrics=[tf.keras.metrics.BinaryAccuracy(
-        name='accuracy', dtype=None, threshold=0.5),tf.keras.metrics.Recall(name='Recall'),tf.keras.metrics.Precision(name='Precision'), 
-                    tf.keras.metrics.AUC(
-        num_thresholds=200,
-        curve="ROC",
-        summation_method="interpolation",
-        name="AUC",
-        dtype=None,
-        thresholds=None,
-        multi_label=True,
-        label_weights=None,
-    )])
-
+    
+    output_layer = tf.keras.layers.Dense(27, activation='sigmoid')(gap_layer)
+    
+    model = tf.keras.models.Model(inputs=input_layer, outputs=output_layer)
+    
+    model.compile(
+        loss=tf.keras.losses.BinaryCrossentropy(),
+        optimizer=tf.keras.optimizers.Adam(1e-3),
+        metrics=[
+            tf.keras.metrics.BinaryAccuracy(threshold=0.5),
+            tf.keras.metrics.Recall(name='Recall'),
+            tf.keras.metrics.Precision(name='Precision'),
+            tf.keras.metrics.AUC(curve="ROC", multi_label=True, name="AUC")
+        ])
 
     return model
 
