@@ -311,58 +311,55 @@ def lime_global(
 # Plotting utilities (matplotlib, single-plot figures, no colors set)
 # ============================================================
 
-def plot_feature_importance(feat_imp: np.ndarray, feature_names: Optional[list] = None,
-                            title: str = "Feature importance"):
+# --- Plotly plotting utilities for timeseries LIME ---
+import numpy as np
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
+
+def plot_feature_importance_plotly(feat_imp, feature_names=None, title="Feature importance (LIME)"):
     feat_imp = np.asarray(feat_imp, dtype=np.float32)
     F = feat_imp.shape[0]
     if feature_names is None:
         feature_names = [f"F{i}" for i in range(F)]
-    x = np.arange(F)
-    plt.figure()
-    plt.bar(x, feat_imp)
-    plt.xticks(x, feature_names, rotation=45, ha="right")
-    plt.title(title)
-    plt.tight_layout()
-    plt.show()
+    fig = go.Figure(data=[go.Bar(x=feature_names, y=feat_imp)])
+    fig.update_layout(title=title, xaxis_title="Feature", yaxis_title="Importance", bargap=0.2)
+    fig.show()
+    return None
 
-
-def plot_event_importance(event_imp: np.ndarray, event_slices: np.ndarray,
-                          sr: Optional[float] = None, title: str = "Event importance"):
+def plot_event_importance_plotly(event_imp, event_slices, sr=None, title="Event importance (LIME)"):
     event_imp = np.asarray(event_imp, dtype=np.float32)
-    centers = np.array([0.5 * (s + e) for s, e in event_slices], dtype=np.float32)
+    centers = np.array([0.5*(s+e) for s, e in event_slices], dtype=np.float32)
     if sr is not None:
         centers = centers / float(sr)
-    plt.figure()
-    plt.plot(centers, event_imp)
-    plt.xlabel("Time" + (" (s)" if sr is not None else " (samples)"))
-    plt.ylabel("Event importance")
-    plt.title(title)
-    plt.tight_layout()
-    plt.show()
+        xtitle = "Time (s)"
+    else:
+        xtitle = "Time (samples)"
+    fig = go.Figure(data=[go.Scatter(x=centers, y=event_imp, mode="lines+markers")])
+    fig.update_layout(title=title, xaxis_title=xtitle, yaxis_title="Importance")
+    fig.show()
+    return None
 
-
-def plot_cell_heatmap(cell_imp: np.ndarray, title: str = "Cell importance (Event × Feature)",
-                      feature_names: Optional[list] = None):
+def plot_cell_heatmap_plotly(cell_imp, feature_names=None, title="Cell importance (Event × Feature)"):
     cell_imp = np.asarray(cell_imp, dtype=np.float32)
     E, F = cell_imp.shape
     if feature_names is None:
         feature_names = [f"F{i}" for i in range(F)]
-    plt.figure()
-    plt.imshow(cell_imp, aspect="auto", origin="lower", interpolation="nearest")
-    plt.yticks(np.arange(E), [f"E{i}" for i in range(E)])
-    plt.xticks(np.arange(F), feature_names, rotation=45, ha="right")
-    plt.title(title)
-    plt.tight_layout()
-    plt.show()
+    y_labels = [f"E{i}" for i in range(E)]
+    fig = go.Figure(data=go.Heatmap(
+        z=cell_imp,
+        x=feature_names,
+        y=y_labels,
+        colorscale="Viridis",
+        colorbar_title="Importance",
+        zsmooth=False
+    ))
+    fig.update_layout(title=title, xaxis_title="Feature", yaxis_title="Event index")
+    fig.show()
+    return None
 
-
-def plot_signal_with_event_overlay(x: np.ndarray, event_imp: np.ndarray, event_slices: np.ndarray,
-                                   sr: Optional[float] = None, title: str = "Signal + event importance"):
-    """
-    If x has shape [T,F], the first feature is plotted.
-    """
+def plot_signal_with_event_overlay_plotly(x, event_imp, event_slices, sr=None, title="Signal + event importance"):
     x = np.asarray(x, dtype=np.float32)
-    if x.ndim == 2:
+    if x.ndim == 2:  # [T, F] -> take first feature
         x = x[:, 0]
     T = x.shape[0]
     step = np.zeros(T, dtype=np.float32)
@@ -371,14 +368,19 @@ def plot_signal_with_event_overlay(x: np.ndarray, event_imp: np.ndarray, event_s
     t = np.arange(T, dtype=np.float32)
     if sr is not None:
         t = t / float(sr)
-    plt.figure()
-    plt.plot(t, x, label="Signal")
-    plt.plot(t, step, label="Event importance (step)")
-    plt.xlabel("Time" + (" (s)" if sr is not None else " (samples)"))
-    plt.title(title)
-    plt.legend()
-    plt.tight_layout()
-    plt.show()
+        xtitle = "Time (s)"
+    else:
+        xtitle = "Time (samples)"
+
+    fig = make_subplots(specs=[[{"secondary_y": True}]])
+    fig.add_trace(go.Scatter(x=t, y=x, mode="lines", name="Signal"), secondary_y=False)
+    fig.add_trace(go.Scatter(x=t, y=step, mode="lines", name="Event importance (step)"), secondary_y=True)
+    fig.update_layout(title=title)
+    fig.update_xaxes(title_text=xtitle)
+    fig.update_yaxes(title_text="Amplitude", secondary_y=False)
+    fig.update_yaxes(title_text="Importance", secondary_y=True)
+    fig.show()
+    return None
 
 
 # ============================================================
