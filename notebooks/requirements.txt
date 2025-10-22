@@ -21,9 +21,13 @@ chardet==3.0.4
 numpy==1.18.5
 idna==2.9
 python-dateutil==2.8.1
-
-# Additional imports from your code
 seaborn==0.10.1
 tensorflow==2.2.0
 tensorflow-addons==0.10.0
 keras==2.4.3
+lime
+shap<=0.42.1
+timeshap
+plotly
+pydot
+nbformats
