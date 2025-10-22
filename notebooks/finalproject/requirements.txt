@@ -29,4 +29,5 @@ lime
 shap<=0.42.1
 timeshap
 plotly
+pydot
 nbformats
