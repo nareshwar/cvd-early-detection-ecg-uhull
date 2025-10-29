@@ -299,7 +299,7 @@ def residual_network_1d():
 
     gap_layer = tf.keras.layers.GlobalAveragePooling1D()(output_block_3)
 
-    output_layer = tf.keras.layers.Dense(27, activation='softmax')(gap_layer)
+    output_layer = tf.keras.layers.Dense(27, activation='sigmoid')(gap_layer)   
 
     model = tf.keras.models.Model(inputs=input_layer, outputs=output_layer)
 
