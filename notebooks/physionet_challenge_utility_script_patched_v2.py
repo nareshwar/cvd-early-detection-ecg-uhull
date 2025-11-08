@@ -230,7 +230,6 @@ def calculating_class_weights(y_true):
         weights[i] = compute_class_weight(class_weight='balanced', classes=np.array([0., 1.]), y=y_true[:, i])
     return weights
 
-
 def residual_network_1d():
     n_feature_maps = 64
     input_shape = (5000,12)
@@ -299,11 +298,11 @@ def residual_network_1d():
 
     gap_layer = tf.keras.layers.GlobalAveragePooling1D()(output_block_3)
 
-    output_layer = tf.keras.layers.Dense(27, activation='sigmoid')(gap_layer)   
+    output_layer = tf.keras.layers.Dense(27, activation='softmax')(gap_layer)
 
-    model = tf.keras.models.Model(inputs=input_layer, outputs=output_layer)
+    model = tf.tf.keras.models.Model(inputs=input_layer, outputs=output_layer)
 
-    model.compile(loss=tf.keras.losses.BinaryCrossentropy(), optimizer=tf.keras.optimizers.Adam(learning_rate=0.001), metrics=[tf.keras.metrics.BinaryAccuracy(
+    model.compile(loss=tf.keras.losses.BinaryCrossentropy(), optimizer=tf.tf.keras.optimizers.Adam(learning_rate=0.001), metrics=[tf.keras.metrics.BinaryAccuracy(
         name='accuracy', dtype=None, threshold=0.5),tf.keras.metrics.Recall(name='Recall'),tf.keras.metrics.Precision(name='Precision'), 
                     tf.keras.metrics.AUC(
         num_thresholds=200,
@@ -315,7 +314,6 @@ def residual_network_1d():
         multi_label=True,
         label_weights=None,
     )])
-
 
     return model
 
